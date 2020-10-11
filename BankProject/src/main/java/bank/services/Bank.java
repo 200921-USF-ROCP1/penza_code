@@ -1,9 +1,11 @@
-package Bank;
+package bank.services;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
-import java.sql.ResultSet;
+//import java.sql.Statement;
+
+import bank.models.Role;
+import bank.models.User;
 
 public class Bank {
 
@@ -16,14 +18,20 @@ public class Bank {
 		String dbPass = "tfxTrmdc2d8ng2vgnJeVpi5dvgDNVMKt";
 		
 		Connection c = null;
-		Statement stmt = null;
+		//Statement stmt = null;
 		try {
-			 Class.forName("org.postgresql.Driver");
-			 c = DriverManager.getConnection( dbConnection, dbUser, dbPass );
-			 System.out.println("Opened database successfully");
+			// Open the database
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection( dbConnection, dbUser, dbPass );
 			 
-			User u = new User( "cpenza" );
-			u.getDBInfo( c );
+			//User u = new User( c, "spage" );
+			//u.getDBInfo( c );
+			Role role = new Role();
+			role.setRoleId(1);
+			
+			User u = new User ( c, "cpenza7", "XYZ", "Christine", "Penza", "christinepenza7@revature.com", role );
+			u.printInfo();
+			
 			 
 			 /*
 	         stmt = c.createStatement();

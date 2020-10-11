@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ROCP-1</groupId>
+  <artifactId>BankProject</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <description>Bank Final Project</description>
+  
+  <dependencies>
+	<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>42.2.16</version>
+	</dependency>
+
+  	<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+	<dependency>
+	    <groupId>org.junit.jupiter</groupId>
+	    <artifactId>junit-jupiter-engine</artifactId>
+	    <version>5.7.0</version>
+	    <scope>test</scope>
+	    <exclusions>
+	    	<exclusion>
+	    	<groupId>org.slf4j</groupId>
+	    	<artifactId>slf4j</artifactId>
+	    	</exclusion>
+	    </exclusions>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-runner -->
+	<dependency>
+	    <groupId>org.junit.platform</groupId>
+	    <artifactId>junit-platform-runner</artifactId>
+	    <version>1.7.0</version>
+	    <scope>test</scope>
+	    <exclusions>
+	    	<exclusion>
+	    	<groupId>org.slf4j</groupId>
+	    	<artifactId>slf4j</artifactId>
+	    	</exclusion>
+	    </exclusions>
+	</dependency>
+	
+	<!--dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+        <version>1.16</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency-->
+  
+  </dependencies>
+</project>
