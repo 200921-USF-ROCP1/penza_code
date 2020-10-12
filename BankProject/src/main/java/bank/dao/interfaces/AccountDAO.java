@@ -6,13 +6,13 @@ import bank.models.User;
 
 public interface AccountDAO {
 
-		public void create(Account a);
+		public void create(Account a) throws Exception;
 		
-		public Account get(int id);
+		public Account get(int id) throws Exception;
 		
-		public void update(Account a);
+		public void update(Account a) throws Exception;
 		
-		public void delete(Account a);
+		public void delete(Account a) throws Exception;
 		
-		public List<Account> getAll(User u);
+		public List<Account> getAll(User u) throws Exception;
 }

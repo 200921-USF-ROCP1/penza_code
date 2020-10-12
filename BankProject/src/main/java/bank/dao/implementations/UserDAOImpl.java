@@ -21,18 +21,40 @@ public class UserDAOImpl implements UserDAO {
 		this.connection = ConnectionService.getConnection();
 	}
 	
-	public void create(User u) throws Exception {
+	public User create(User u) throws Exception {
+		Role r = null;
+		String s = null;
 		
 		try {
-			pstmt = connection.prepareStatement("INSERT INTO users( username, password, firstname, lastName, email, roleid ) values"
-	        		+ "	( ?, ?, ?, ?, ?, ? );" );
+			r = u.getRole();
+
+			s = "INSERT INTO users( username, password, firstname, lastName, email";
+			if( r != null ) {
+				s = s + ", roleid";
+			}
+			s = s + " ) values"
+	        	+ "	( ?, ?, ?, ?, ?";
+			if( r != null) {
+				s = s + ", ?";
+			}
+			s = s + " );";
+			pstmt = connection.prepareStatement(s, PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, u.getUsername());
 			pstmt.setString(2, u.getPassword());
 			pstmt.setString(3, u.getFirstName());
 			pstmt.setString(4, u.getLastName());
 			pstmt.setString(5, u.getEmail());
-			pstmt.setInt(6, u.getRole().getRoleId());
-	        pstmt.executeUpdate();		
+
+			if( r != null ) {
+				pstmt.setInt(6, r.getRoleId());
+			}
+	        pstmt.executeUpdate();
+	        
+            rs = pstmt.getGeneratedKeys();
+            if(rs.next())
+            {
+                u.setUserid(rs.getInt(1));
+            }
 
 		} catch(Exception e) {
 			 throw e;
@@ -45,7 +67,8 @@ public class UserDAOImpl implements UserDAO {
 			catch(Exception e) {
 				throw e;
 			}
-		}		
+		}
+		return u;
 	};
 	
 	public User get(int id) throws Exception {
@@ -55,16 +78,17 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			pstmt = connection.prepareStatement("SELECT u.username AS username, u.password AS password, u.firstname AS firstname,"
 					+ " u.lastname AS lastname, u.email AS email, r.roleid AS roleid, r.rolename AS rolename"
-					+ " FROM users AS u INNER JOIN role AS r ON u.roleid = r.roleid"
+					+ " FROM users AS u LEFT JOIN roles AS r ON u.roleid = r.roleid"
 					+ " WHERE u.userid = ?;");
 			pstmt.setInt(1, id );
-	        pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 
 			if( rs.next() ) {
 				r = new Role( rs.getInt("roleid"), rs.getString("rolename") );
 				
 				u = new User( rs.getString("username"), rs.getString("password"), rs.getString("firstname"),
 								rs.getString("lastname"), rs.getString("email") );
+				u.setUserid(id);
 				u.setRole(r);
 			}
 		} catch(Exception e) {
@@ -89,16 +113,16 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			pstmt = connection.prepareStatement("UPDATE users"
 					+ " SET username=?, password=?, firstname=?, lastName=?, email=?, roleid=?"
-					+ " WHERE u.userid = ?;");
+					+ " WHERE userid = ?;");
 			
-			pstmt.setString(1,  u.getUsername());
+			pstmt.setString(1, u.getUsername());
 			pstmt.setString(2, u.getPassword());
 			pstmt.setString(3, u.getFirstName());
-			pstmt.setString(4,  u.getLastName());
-			pstmt.setString(5,  u.getEmail());
+			pstmt.setString(4, u.getLastName());
+			pstmt.setString(5, u.getEmail());
 			pstmt.setInt(6, r.getRoleId());
 			pstmt.setInt(7, u.getUserid());
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 
 		} catch(Exception e) {
 			 throw e;
@@ -117,10 +141,10 @@ public class UserDAOImpl implements UserDAO {
 	public void delete(User u) throws Exception {
 		try {
 			pstmt = connection.prepareStatement("DELETE FROM users"
-					+ " WHERE u.userid = ?;");
+					+ " WHERE userid = ?;");
 			
 			pstmt.setInt(1, u.getUserid());
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 
 		} catch(Exception e) {
 			 throw e;
@@ -145,7 +169,7 @@ public class UserDAOImpl implements UserDAO {
 			pstmt = connection.prepareStatement("SELECT u.username AS username, u.password AS password, u.firstname AS firstname,"
 					+ " u.lastname AS lastname, u.email AS email, r.roleid AS roleid, r.rolename AS rolename"
 					+ " FROM users AS u INNER JOIN role AS r ON u.roleid = r.roleid;");
-	        pstmt.executeQuery();
+	        rs = pstmt.executeQuery();
 	        
 			while( rs.next() ) {
 				r = new Role( rs.getInt("roleid"), rs.getString("rolename") );

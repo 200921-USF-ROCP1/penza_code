@@ -5,7 +5,7 @@ import bank.models.User;
 
 public interface UserDAO {
 
-		public void create(User u) throws Exception;
+		public User create(User u) throws Exception;
 		
 		public User get(int id) throws Exception;
 		

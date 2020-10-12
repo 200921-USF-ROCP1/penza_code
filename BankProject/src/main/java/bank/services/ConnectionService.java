@@ -14,6 +14,7 @@ public class ConnectionService {
 	public static Connection getConnection() {
 		if (connection == null) {
 			try {
+				Class.forName("org.postgresql.Driver");
 				FileInputStream fis = new FileInputStream("connection.properties");
 				Properties prop = new Properties();
 				prop.load(fis);

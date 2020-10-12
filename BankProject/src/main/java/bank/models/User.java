@@ -1,14 +1,9 @@
 package bank.models;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 // For now, the password is stored in clear text.  Fix this!
 // https://www.2ndquadrant.com/en/blog/password-authentication-methods-in-postgresql/
 
 public class User {
-	private Connection c;
 
 	private int userid; // primary key
 	private String username; // not null, unique
@@ -18,20 +13,13 @@ public class User {
 	private String email; // not null
 	private Role role;
 
-	// Create the User object and database user
+	// Create the User object
 	public User( String username, String password, String firstName, String lastName, String email ) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-	}
-	
-	// Create the User object and get the existing user info from the database
-	
-	public User( String username ) {
-		
-		this.username = username;
 	}
 	
 	public int getUserid() {
@@ -87,41 +75,6 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
-	}
-	
-	private void getDBInfo() throws Exception {
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			pstmt = c.prepareStatement("SELECT * FROM users WHERE username = ?;" );
-	        pstmt.setString(1, username);
-	        rs = pstmt.executeQuery();
-	        rs.next();
-	        
-	        userid = rs.getInt("userid");
-	        //username = rs.getString("username");
-	        password = rs.getString("password");
-	        firstName = rs.getString("firstname");
-	        lastName = rs.getString("lastname");
-	        email = rs.getString("email");
-	        
-		} catch ( Exception e ) {
-			 throw e;
-		} finally {
-			try {
-				if( rs != null ) {
-					rs.close();
-				}
-				if( pstmt != null ) {
-					pstmt.close();
-				}
-			}
-			catch( Exception e ) {
-				throw e;
-			}
-		}
 	}
 	
 	public void printInfo() {

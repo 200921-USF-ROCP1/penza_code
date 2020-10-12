@@ -5,7 +5,7 @@ package bank.models;
 public class Account {
 	
 	private int accountId;
-	private double balance;
+	private double balance;	//bigdecimal might be better for money
 	private AccountStatus status;
 	private AccountType type;
 	
