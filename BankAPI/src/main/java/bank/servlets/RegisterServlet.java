@@ -7,16 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import bank.models.Login;
 import bank.models.User;
-import bank.services.LoginService;
 import bank.services.UserService;
 
-/**
- * Servlet implementation class LoginServlet
- */
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ObjectMapper objectMapper = new ObjectMapper();
@@ -38,26 +34,47 @@ public class RegisterServlet extends HttpServlet {
 		try {
 			HttpSession session = request.getSession();
 			role = (String) session.getAttribute("role");
+
+			// Non-Admins cannot register new users
 			if( role == null || !role.equals("Admin") ) {
-				// Non-Admins cannot register new users
 			    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			    response.getWriter().append( "{\r\n"
 			    		+ "  \"message\": \"Unauthorized\"\r\n"
 			    		+ "}");
-			} else {
-				user = objectMapper.readValue(request.getReader(), User.class);
-				user = UserService.registerUser(user);
-				if( user != null ) {
-					// User successfully created
-					response.setStatus(HttpServletResponse.SC_CREATED);
-					String jsonString = mapper.writeValueAsString(user);
-					response.getWriter().append(jsonString);
-				} else {
+			} 
+			// Admins
+			else {
+				
+				// In case of invalid JSON
+				try {
+					user = objectMapper.readValue(request.getReader(), User.class);
+					user = UserService.registerUser(user);
+					
+					// User successfully registered
+					if( user != null ) {
+						response.setStatus(HttpServletResponse.SC_CREATED);
+						String jsonString = mapper.writeValueAsString(user);
+						response.getWriter().append(jsonString);
+						
 					// User email or username already exists; or some other error
+					} else {
+					    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					    response.getWriter().append( "{\r\n"
+					    		+ "  \"message\": \"Invalid fields\"\r\n"
+					    		+ "}");
+					}
+				} catch( JsonParseException jpe ){
 				    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				    response.getWriter().append( "{\r\n"
-				    		+ "  \"message\": \"Invalid fields\"\r\n"
+				    		+ "  \"message\": \"Invalid request\"\r\n"
 				    		+ "}");
+				    jpe.printStackTrace();
+				} catch( Exception e ){
+				    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				    response.getWriter().append( "{\r\n"
+				    		+ "  \"message\": \"Invalid request\"\r\n"
+				    		+ "}");
+				    e.printStackTrace();
 				}
 			}
 		} catch (Exception e) {

@@ -196,8 +196,8 @@ public class UserDAOImpl implements UserDAO {
 		}						
 	};
 	
-	public List<User> getAll() throws Exception {
-		List<User> userList = new ArrayList<User>();
+	public ArrayList<User> getAll() throws Exception {
+		ArrayList<User> userList = new ArrayList<User>();
 		User u = null;
 		Role r = null;
 		

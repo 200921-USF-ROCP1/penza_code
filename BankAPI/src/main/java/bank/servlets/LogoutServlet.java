@@ -7,17 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import bank.models.Login;
-import bank.models.User;
-
-/**
- * Servlet implementation class LoginServlet
- */
 public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ObjectMapper objectMapper = new ObjectMapper();
 
     public LogoutServlet() {
         super();

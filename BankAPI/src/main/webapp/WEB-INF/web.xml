@@ -39,4 +39,44 @@
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>WithdrawServlet</display-name>
+    <servlet-name>WithdrawServlet</servlet-name>
+    <servlet-class>bank.servlets.WithdrawServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WithdrawServlet</servlet-name>
+    <url-pattern>/accounts/withdraw</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DepositServlet</display-name>
+    <servlet-name>DepositServlet</servlet-name>
+    <servlet-class>bank.servlets.DepositServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DepositServlet</servlet-name>
+    <url-pattern>/accounts/deposit</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TransferServlet</display-name>
+    <servlet-name>TransferServlet</servlet-name>
+    <servlet-class>bank.servlets.TransferServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TransferServlet</servlet-name>
+    <url-pattern>/accounts/transfer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UsersServlet</display-name>
+    <servlet-name>UsersServlet</servlet-name>
+    <servlet-class>bank.servlets.UsersServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UsersServlet</servlet-name>
+    <url-pattern>/users</url-pattern>
+  </servlet-mapping>
 </web-app>

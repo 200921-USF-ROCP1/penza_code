@@ -1,5 +1,6 @@
 package bank.dao.interfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 import bank.models.User;
 
@@ -15,6 +16,6 @@ public interface UserDAO {
 		
 		public void delete(User u) throws Exception;
 		
-		public List<User> getAll() throws Exception;
+		public ArrayList<User> getAll() throws Exception;
 		
 }

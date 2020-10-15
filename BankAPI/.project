@@ -3,6 +3,7 @@
 	<name>BankAPI</name>
 	<comment></comment>
 	<projects>
+		<project>BankAPIProject</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

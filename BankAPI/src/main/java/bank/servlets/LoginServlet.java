@@ -42,6 +42,7 @@ public class LoginServlet extends HttpServlet {
 				String jsonString = mapper.writeValueAsString(user);
 				response.getWriter().append(jsonString);
 				HttpSession session = request.getSession();
+				session.setAttribute("userid", user.getUserid());
 				session.setAttribute("username", user.getUsername());
 				session.setAttribute("role", user.getRole().getRole());
 			} else {

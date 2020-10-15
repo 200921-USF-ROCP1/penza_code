@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS useraccounts CASCADE;
 DROP TABLE IF EXISTS accounttype CASCADE;
 DROP TABLE IF EXISTS accountstatus CASCADE;
 DROP TABLE IF EXISTS accounts CASCADE;
@@ -27,11 +28,20 @@ INSERT INTO accountstatus( statusid, status ) values
 	( 4, 'Denied' );
 
 CREATE TABLE accounts (
-	accountid serial primary key,	// not the best use for account numbers, but this can be changed later
+	accountid serial primary key,	-- not the best use for account numbers, but this can be changed later
 	balance numeric(10, 2) not null,
 	status int references accountstatus(statusid),
 	type int references accounttype(typeid)
 );
+
+-- Insert test data
+INSERT INTO accounts( balance, status, type ) values
+	( 1000.50, 1, 1 ), -- Pending Checking
+	( 2500, 2, 2 ), -- Open Savings
+	( 0, 2, 1 ), -- Open Checking
+	( 750.49, 3, 1 ), -- Closed Checking
+	( 42, 4, 2 ), -- Denied Savings
+	(100, 2, 2 ); -- Open Checking
 	
 CREATE TABLE roles (
 	roleid int primary key,
@@ -63,4 +73,15 @@ INSERT INTO users( username, password, firstname, lastname, email, roleid ) valu
 	( 'tbrown', '12345', 'Tony', 'Brown', 'tbrown@revature.com', 1 ),
 	( 'pdiddy', 'puff', 'Patrick', 'Diddy', 'pdado@revature.com', 4 ),
 	( 'spage', 'ABC', 'Steven', 'Page', 'spage@revature.com', 2 )
+;
+
+CREATE TABLE useraccounts (
+	userid int,
+	accountid int
+);
+
+-- Insert test data
+insert into useraccounts ( userid, accountid ) values
+( 1, 2 ),
+( 3, 6 )
 ;

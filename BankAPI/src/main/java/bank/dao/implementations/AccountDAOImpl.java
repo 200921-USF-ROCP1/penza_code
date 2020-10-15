@@ -13,7 +13,7 @@ import bank.models.AccountType;
 import bank.models.User;
 import bank.services.ConnectionService;
 
-public class AccountDAOImpl implements AccountDAO {
+public class AccountDAOImpl  implements AccountDAO {
 
 	Connection connection = null;
 	PreparedStatement pstmt = null;
@@ -64,12 +64,12 @@ public class AccountDAOImpl implements AccountDAO {
 		try {
 			pstmt = connection.prepareStatement("SELECT a.accountid AS accountid, a.balance AS balance,"
 					+ " astatus.statusid AS statusid, astatus.status AS status,"
-					+ " atype.typeid AS typeid, atyps.type AS type"
+					+ " atype.typeid AS typeid, atype.type AS type"
 					+ " FROM accounts AS a LEFT JOIN accountstatus AS astatus ON a.status = astatus.statusid"
 					+ " LEFT JOIN accounttype AS atype ON a.type = atype.typeid"
 					+ " WHERE a.accountid = ?;");
 			pstmt.setInt(1, id );
-	        pstmt.executeQuery();
+	        rs = pstmt.executeQuery();
 
 			if( rs.next() ) {
 				a = new Account();
@@ -132,7 +132,7 @@ public class AccountDAOImpl implements AccountDAO {
 			}
 
 			pstmt.setInt(i++, a.getAccountId());
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 			
 		} catch(Exception e) {
 			 throw e;
@@ -147,6 +147,99 @@ public class AccountDAOImpl implements AccountDAO {
 			}
 		}					
 	};
+	
+	public void withdraw(Account a, double amount) throws Exception {
+
+		String stmt = null;
+		
+		try {			
+			stmt = "UPDATE accounts"
+					+ " SET balance=balance-?"
+					+ " WHERE accountid = ?;";
+			pstmt = connection.prepareStatement( stmt );
+			
+			int i=1;
+			pstmt.setDouble(i++, amount);
+			pstmt.setInt(i++, a.getAccountId());
+			pstmt.executeUpdate();
+			
+		} catch(Exception e) {
+			 throw e;
+		} finally {
+			try {
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+			}
+			catch(Exception e) {
+				throw e;
+			}
+		}							
+	}
+	
+	public void deposit(Account a, double amount) throws Exception {
+
+		String stmt = null;
+		
+		try {			
+			stmt = "UPDATE accounts"
+					+ " SET balance=balance+?"
+					+ " WHERE accountid = ?;";
+			pstmt = connection.prepareStatement( stmt );
+			
+			int i=1;
+			pstmt.setDouble(i++, amount);
+			pstmt.setInt(i++, a.getAccountId());
+			pstmt.executeUpdate();
+			
+		} catch(Exception e) {
+			 throw e;
+		} finally {
+			try {
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+			}
+			catch(Exception e) {
+				throw e;
+			}
+		}					
+	}
+	
+	public void transfer(Account sourceAccount, Account targetAccount, double amount) throws Exception {
+		String stmt = null;
+		
+		try {			
+			stmt = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+					+ " UPDATE accounts"
+					+ " SET balance=balance+?"
+					+ " WHERE accountid = ?;"
+					+ " UPDATE accounts"
+					+ " SET balance=balance-?"
+					+ " WHERE accountid = ?;"
+					+ "COMMIT;";
+			pstmt = connection.prepareStatement( stmt );
+			
+			int i=1;
+			pstmt.setDouble(i++, amount);
+			pstmt.setInt(i++, targetAccount.getAccountId());
+			pstmt.setDouble(i++, amount);
+			pstmt.setInt(i++, sourceAccount.getAccountId());
+			pstmt.executeUpdate();
+			
+		} catch(Exception e) {
+			 throw e;
+		} finally {
+			try {
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+			}
+			catch(Exception e) {
+				throw e;
+			}
+		}					
+	}		
 	
 	public void delete(Account a) throws Exception {
 		try {
