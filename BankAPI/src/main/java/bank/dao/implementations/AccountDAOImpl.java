@@ -263,8 +263,8 @@ public class AccountDAOImpl  implements AccountDAO {
 		}								
 	};
 	
-	public List<Account> getAll(User u) throws Exception {
-		List<Account> accountList = new ArrayList<Account>();
+	public ArrayList<Account> getAll() throws Exception {
+		ArrayList<Account> accountList = new ArrayList<Account>();
 		Account a = null;
 		AccountStatus astatus = null;
 		AccountType atype = null;
@@ -275,7 +275,7 @@ public class AccountDAOImpl  implements AccountDAO {
 					+ " atype.typeid AS typeid, atype.type AS type"
 					+ " FROM accounts AS a LEFT JOIN accountstatus AS astatus ON a.status = astatus.statusid"
 					+ " LEFT JOIN accounttype AS atype ON a.type = atype.typeid;");
-	        pstmt.executeQuery();
+	        rs = pstmt.executeQuery();
 	        
 			while( rs.next() ) {
 				a = new Account();

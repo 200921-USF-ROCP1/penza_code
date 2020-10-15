@@ -147,4 +147,56 @@ public class AccountService {
 		
 		return status;
 	}
+	
+	public static ArrayList<Account> listAccounts( User user ) {
+		ArrayList<Account> accountList = new ArrayList<Account>();
+		String role = user.getRole().getRole();
+		
+		if( !role.equals("Admin") && !role.equals("Employee") ) {
+			return null;
+		}
+		try {
+			AccountDAO adao = new AccountDAOImpl();
+			accountList = adao.getAll();
+			return accountList;
+		} catch( Exception e ) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Account getAccount( User user, int accountId ) {
+		String role = user.getRole().getRole();
+		int curUserId = user.getUserid();
+		Account account = null;
+		boolean okToGetAccount = false;
+		
+		if( !role.equals("Admin") || !role.equals("Employee") ) {
+			okToGetAccount = true;
+		} else {
+			// Non-Admin; user must own the account
+			UserAccountDAO uadao = new UserAccountDAOImpl();
+			try {
+				ArrayList<Integer> userAccounts = uadao.getAccountOwners(accountId);
+				if( userAccounts.contains(curUserId) ) {
+					okToGetAccount = true;
+				}
+			} catch( Exception e ) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		if( okToGetAccount ) {
+			try {
+				AccountDAO adao = new AccountDAOImpl();
+				account = adao.get(accountId);
+				return account;
+			} catch( Exception e ) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return null;
+	}
 }

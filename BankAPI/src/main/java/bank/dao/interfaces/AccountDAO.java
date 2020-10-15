@@ -1,5 +1,6 @@
 package bank.dao.interfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 import bank.models.Account;
 import bank.models.User;
@@ -28,5 +29,5 @@ public interface AccountDAO {
 		
 		public void delete(Account a) throws Exception;
 		
-		public List<Account> getAll(User u) throws Exception;
+		public ArrayList<Account> getAll() throws Exception;
 }

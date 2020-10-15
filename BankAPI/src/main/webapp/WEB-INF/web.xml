@@ -77,6 +77,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>UsersServlet</servlet-name>
-    <url-pattern>/users</url-pattern>
+    <url-pattern>/users/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AccountsServlet</display-name>
+    <servlet-name>AccountsServlet</servlet-name>
+    <servlet-class>bank.servlets.AccountsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AccountsServlet</servlet-name>
+    <url-pattern>/accounts/*</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -18,8 +18,9 @@ public class UserService {
 		}
 	}
 	
-	public static ArrayList<User> listUsers( String role ) {
+	public static ArrayList<User> listUsers( User user ) {
 		ArrayList<User> userList = new ArrayList<User>();
+		String role = user.getRole().getRole();
 		
 		if( !role.equals("Admin") && !role.equals("Employee") ) {
 			return null;
@@ -32,5 +33,23 @@ public class UserService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static User getUser( User user, int userId ) {
+		String role = user.getRole().getRole();
+		int curUserId = user.getUserid();
+		User listUser = null;
+		
+		if( !role.equals("Admin") || !role.equals("Employee") || curUserId == userId ) {
+			try {
+				UserDAO udao = new UserDAOImpl();
+				listUser = udao.get(userId);
+				return listUser;
+			} catch( Exception e ) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return null;
 	}
 }

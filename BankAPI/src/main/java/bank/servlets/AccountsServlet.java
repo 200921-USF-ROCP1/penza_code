@@ -11,13 +11,14 @@ import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import bank.models.Account;
 import bank.models.User;
-import bank.services.UserService;
+import bank.services.AccountService;
 
-public class UsersServlet extends HttpServlet {
+public class AccountsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public UsersServlet() {
+    public AccountsServlet() {
         super();
     }
 
@@ -32,21 +33,24 @@ public class UsersServlet extends HttpServlet {
 		try {
 			HttpSession session = request.getSession();
 			user = (User) session.getAttribute("user");
+			System.out.println( "User info");
+			System.out.println( user.getFirstName());
 			
-			// Get a specific user
+			// Get a specific account
 			if( pathParts.length == 4) {
-				if( UsersServlet.isNumeric(pathParts[3])) {
-					int userid = Integer.parseInt(pathParts[3]);
-					User listUser = UserService.getUser( user, userid );
-					String jsonString = mapper.writeValueAsString(listUser);
+				if( AccountsServlet.isNumeric(pathParts[3])) {
+					int accountid = Integer.parseInt(pathParts[3]);
+					Account account = AccountService.getAccount( user, accountid );
+					String jsonString = mapper.writeValueAsString(account);
 					response.getWriter().append(jsonString);
 				    response.setStatus(HttpServletResponse.SC_OK);
 				}
 			}
-			// Get all users
+			// Get all accounts
 			else {
-				ArrayList<User> userList = UserService.listUsers( user );
-				String jsonString = mapper.writeValueAsString(userList);
+
+				ArrayList<Account> accountList = AccountService.listAccounts( user );
+				String jsonString = mapper.writeValueAsString(accountList);
 				response.getWriter().append(jsonString);
 			    response.setStatus(HttpServletResponse.SC_OK);
 			}
@@ -60,8 +64,8 @@ public class UsersServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
-    public static boolean isNumeric(final String str) {
+	
+   public static boolean isNumeric(final String str) {
 
         // null or empty
         if (str == null || str.length() == 0) {
