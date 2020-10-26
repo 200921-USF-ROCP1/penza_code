@@ -4,16 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 import bank.dao.interfaces.AccountDAO;
 import bank.models.Account;
 import bank.models.AccountStatus;
 import bank.models.AccountType;
-import bank.models.User;
 import bank.services.ConnectionService;
 
-public class AccountDAOImpl  implements AccountDAO {
+public class AccountDAOImpl implements AccountDAO {
 
 	Connection connection = null;
 	PreparedStatement pstmt = null;

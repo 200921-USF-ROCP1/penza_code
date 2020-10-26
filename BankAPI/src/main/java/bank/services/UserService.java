@@ -7,9 +7,11 @@ import bank.dao.interfaces.UserDAO;
 import bank.models.User;
 
 public class UserService {
+	public static UserDAO udao;
+	
 	public static User registerUser( User user ) {
 		try {
-			UserDAO udao = new UserDAOImpl();
+			udao = new UserDAOImpl();
 			user = udao.create( user );
 			return user;			
 		} catch( Exception e ) {
@@ -26,7 +28,7 @@ public class UserService {
 			return null;
 		}
 		try {
-			UserDAO udao = new UserDAOImpl();
+			udao = new UserDAOImpl();
 			userList = udao.getAll();
 			return userList;
 		} catch( Exception e ) {
@@ -40,9 +42,9 @@ public class UserService {
 		int curUserId = user.getUserid();
 		User listUser = null;
 		
-		if( !role.equals("Admin") || !role.equals("Employee") || curUserId == userId ) {
+		if( role.equals("Admin") || role.equals("Employee") || curUserId == userId ) {
 			try {
-				UserDAO udao = new UserDAOImpl();
+				udao = new UserDAOImpl();
 				listUser = udao.get(userId);
 				return listUser;
 			} catch( Exception e ) {

@@ -33,8 +33,6 @@ public class AccountsServlet extends HttpServlet {
 		try {
 			HttpSession session = request.getSession();
 			user = (User) session.getAttribute("user");
-			System.out.println( "User info");
-			System.out.println( user.getFirstName());
 			
 			// Get a specific account
 			if( pathParts.length == 4) {

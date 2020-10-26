@@ -1,9 +1,7 @@
 package bank.dao.interfaces;
 
 import java.util.ArrayList;
-import java.util.List;
 import bank.models.Account;
-import bank.models.User;
 
 public interface AccountDAO {
 
